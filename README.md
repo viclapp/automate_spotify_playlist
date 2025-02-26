@@ -1,2 +1,2 @@
-# build_playlist_apple_music
-Automate the creation of playlists in Apple Music using AI connection
+# automate_spotify_playlist
+Automate the creation of playlists in Spotify using AI connection
