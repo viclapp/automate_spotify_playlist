@@ -57,7 +57,7 @@ def main():
         if track_uri_json['tracks']['total'] > 0:
             track_uri = track_uri_json['tracks']['items'][0]['uri']
             uri = track_uri.split(':')[-1]
-            #res_search_json.append(uri)
+            res_search_json.append(uri)
     print(res_search_json)        
 
     #Etape 6: ajouter uri par uri les morceaux à la playlist
