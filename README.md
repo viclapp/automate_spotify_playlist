@@ -46,6 +46,8 @@ Once you have information about the songs, you'll need to create the playlist, f
 I want my playlist name to be simple, so I called it 'AI Playlist' but feel free to named it as you want!
 You need to keep the playlist_id in a variable for later.
 The script will connect to the Spotify API and create an new empty playlist:
+![Capture d’écran 2025-03-28 à 14 08 37](https://github.com/user-attachments/assets/a1062cb2-4cdb-4b5f-aee6-9858dc2cf331)
+
 
 --insert image--
 
