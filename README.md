@@ -15,7 +15,7 @@ The MistralAgent class is a simple class that I created in order to connect to t
 In this project, we are using the model mistral-tiny. Why this model? Because it is simple of use and free. 
 Get all information of the models here: https://docs.mistral.ai/getting-started/models/models_overview/
 
-`
+```
 def ask_le_chat(self):
         model = self.model
         client = Mistral(api_key=self.api_key)
@@ -39,7 +39,7 @@ def ask_le_chat(self):
             return res_json
         except ValueError:
             print("JSON format is not valid")
-`
+```
 
 ### SpotifyAgent class
 The SpotifyAgent class is the more complex part of this project. In this class, we create all the functions that we will use to interact with the Spotify API.
