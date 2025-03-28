@@ -46,10 +46,68 @@ The SpotifyAgent class is the more complex part of this project. In this class, 
 Before starting, check the documentation here: https://developer.spotify.com/documentation/web-api
 In this class, we have several function.
 - login_to_spotify(): Obviously you need credentials to connect to the API and to your app
+```
+def login_to_spotify(self):
+        self.conn = spotipy.Spotify(
+            auth_manager = spotipy.SpotifyOAuth(
+                client_id=self.client_id,
+                client_secret=self.client_secret,
+                redirect_uri='http://localhost:8080',
+                scope='user-read-playback-state,user-modify-playback-state,playlist-modify-private'
+            )
+        )
+
+        return self.conn
+```
 - create_playlist(): It will creates a new playlist (empty) for your user
+```
+def create_playlist(self):
+        if not self.conn:
+            raise ValueError("Not connected to Spotify, Call login_to_spotify() first")
+        
+        user = self.conn.current_user()
+        playlist = self.conn.user_playlist_create(user['id'], public=False, name=self.playlist_name)
+        return playlist
+```
 - get_spotify_token(): You'll nedd this function to get a token from the API in order to add songs to your playlist
+```
+def get_spotify_token(self):
+        sp_oauth = spotipy.SpotifyOAuth(
+            client_id=self.client_id,
+            client_secret=self.client_secret,
+            redirect_uri=self.redirect_uri,
+            scope='playlist-modify-private playlist-modify-public')
+        
+        token_info = sp_oauth.get_access_token()
+        access_token = token_info['access_token']
+        return access_token
+```
 - search_track_in_spotify(): After the LLM gave you songs, you need to find the IDs of those songs in Spotify
+```
+def search_track_in_spotify(self,track,album,artist,token):
+        search_url = 'https://api.spotify.com/v1/search'
+        headers = {'Authorization': f'Bearer {token}'}
+        query = f'track:{track} artist:{artist} album:{album}'
+        params = {'q': query, 'type': 'track', 'limit': 1}
+        search_res = requests.get(search_url, headers=headers, params=params)
+        search_res.raise_for_status()
+        return search_res.json()
+```
 - add_track_to_playlist(): The final function, the one that will add all the songs to your new playlist
+```
+def add_track_to_playlist(self, playlist_id, track_id):
+        sp_oauth = spotipy.SpotifyOAuth(
+                client_id=self.client_id,
+                client_secret=self.client_secret,
+                redirect_uri=self.redirect_uri,
+                scope='playlist-modify-private playlist-modify-public')
+        
+        token_info = sp_oauth.get_access_token()
+        access_token = token_info['access_token']
+        sp = spotipy.Spotify(auth=access_token)
+        sp.user_playlist_add_tracks(user=sp.current_user()['id'], playlist_id=playlist_id, tracks=track_id)
+        return 
+```
 
 ### The prompt
 In your prompt, you can give the model any type of songs you would like to have in your playlist. The only thing you need to have, is an example of the JSON format you want, so that the LLM creates a well formated response to your request.
