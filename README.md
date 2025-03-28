@@ -15,6 +15,32 @@ The MistralAgent class is a simple class that I created in order to connect to t
 In this project, we are using the model mistral-tiny. Why this model? Because it is simple of use and free. 
 Get all information of the models here: https://docs.mistral.ai/getting-started/models/models_overview/
 
+`
+def ask_le_chat(self):
+        model = self.model
+        client = Mistral(api_key=self.api_key)
+        chat_res = client.chat.complete(
+            model=model,
+            messages=[
+                {
+                    "role":"user",
+                    "content":self.prompt
+                }
+            ]
+        )
+        try:
+            chat_res = chat_res.json()
+            chat_res_json = json.loads(chat_res)
+            res = chat_res_json['choices'][0]['message']['content']
+            start_index = res.find('[')
+            end_index = res.find(']')
+            res_json = res[start_index:end_index+1].strip()
+            res_json = json.loads(res_json)
+            return res_json
+        except ValueError:
+            print("JSON format is not valid")
+`
+
 ### SpotifyAgent class
 The SpotifyAgent class is the more complex part of this project. In this class, we create all the functions that we will use to interact with the Spotify API.
 Before starting, check the documentation here: https://developer.spotify.com/documentation/web-api
@@ -34,6 +60,18 @@ In your prompt, you can give the model any type of songs you would like to have 
 ### API connection
 First thing first, you need to create developers accounts for both Mistral and Spotify. You can find information on the links above.
 
+To create the API key for mistral, go to https://console.mistral.ai/api-keys and click on Create a new key. Once you created it, you'll see it in your space:
+![Capture d’écran 2025-03-28 à 14 13 21](https://github.com/user-attachments/assets/ca401ca2-494e-4fcb-a32c-2ae8c2cde654)
+
+To create the Spotify key, you first need to create a Spotify developer account (https://developer.spotify.com/).
+Once you have your account, go to your_space > dashboard. Now you can create a Spotify app (mandatory step). Here is the setup of the app:
+![Capture d’écran 2025-03-28 à 14 15 56](https://github.com/user-attachments/assets/c14183cf-5224-4741-a169-05d0ff4ece13)
+
+In the dashboard page, you can check some info about the app your created:
+![Capture d’écran 2025-03-28 à 14 16 27](https://github.com/user-attachments/assets/0b3034c0-4f56-4681-81ba-066fdad5d95c)
+
+
+
 ### Step 1
 You connect to the Mistral AI API using the MistralAgent class. 
 You can update the prompt to get the type of music you want :)
@@ -48,8 +86,6 @@ You need to keep the playlist_id in a variable for later.
 The script will connect to the Spotify API and create an new empty playlist:
 ![Capture d’écran 2025-03-28 à 14 08 37](https://github.com/user-attachments/assets/a1062cb2-4cdb-4b5f-aee6-9858dc2cf331)
 
-
---insert image--
 
 ### Step 4
 Now that the playlist is created, you need to find the songs in Spotify using their uri. 
