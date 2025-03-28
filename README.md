@@ -155,5 +155,3 @@ Let's recap a bit, you asked a LLM for new songs to listen, you connected to Spo
 Impressive, but you still can't listen to them. The final step of this code, is to add the songs to your playlist. For this, you will call the function add_track_to_playlist() of the SpotifyAgent class.
 For each uri in the list, this function will add the corresponded song to your playlist.
 And voilà! You have a new playlist built automatically using a LLM!
-
---insert image--
